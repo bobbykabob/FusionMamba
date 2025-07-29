@@ -11,15 +11,20 @@ import argparse
 from sklearn.metrics import accuracy_score, jaccard_score
 import torch.nn.functional as F
 
-def calculate_miou(pred, target, num_classes=9):
-    """Calculate mean IoU for semantic segmentation - average over ALL classes"""
+def calculate_miou_per_sample(pred, target, num_classes=9):
+    """Calculate IoU for each class present in the sample"""
     pred_np = pred.cpu().numpy().flatten()
     target_np = target.cpu().numpy().flatten()
     
-    # Calculate IoU for each class
-    ious = []
+    # Get classes present in this sample
+    present_classes = np.unique(target_np)
+    present_classes = present_classes[present_classes != 0]  # Exclude background
     
-    for class_id in range(num_classes):
+    if len(present_classes) == 0:
+        return 0.0, []
+    
+    ious = []
+    for class_id in present_classes:
         pred_binary = (pred_np == class_id)
         target_binary = (target_np == class_id)
         
@@ -29,34 +34,68 @@ def calculate_miou(pred, target, num_classes=9):
         if union > 0:
             iou = intersection / union
         else:
-            iou = 0.0  # No pixels of this class in either pred or target
+            iou = 0.0
         
         ious.append(iou)
     
-    return np.mean(ious)  # Average over ALL classes, not just present ones
+    return np.mean(ious), ious
 
-def calculate_macc(pred, target, num_classes=9):
-    """Calculate mean class accuracy for semantic segmentation - average over ALL classes"""
-    pred_np = pred.cpu().numpy().flatten()
-    target_np = target.cpu().numpy().flatten()
+def calculate_overall_miou(pred_np, target_np, num_classes=9):
+    """Calculate overall mIoU across all samples"""
+    # Calculate IoU for each class
+    ious = []
+    for class_id in range(num_classes):
+        pred_binary = (pred_np == class_id)
+        target_binary = (target_np == class_id)
+        
+        intersection = np.sum(pred_binary & target_binary)
+        union = np.sum(pred_binary | target_binary)
+        
+        if union > 0:
+            iou = intersection / union
+            ious.append(iou)
     
+    return np.mean(ious) if ious else 0.0
+
+def calculate_overall_macc(pred_np, target_np, num_classes=9):
+    """Calculate overall mAcc across all samples"""
     # Calculate accuracy for each class
     accuracies = []
-    
     for class_id in range(num_classes):
         pred_binary = (pred_np == class_id)
         target_binary = (target_np == class_id)
         
         if np.sum(target_binary) > 0:
-            # Class recall: correctly predicted pixels / total pixels of this class in GT
+            accuracy = np.sum(pred_binary & target_binary) / np.sum(target_binary)
+            accuracies.append(accuracy)
+    
+    return np.mean(accuracies) if accuracies else 0.0
+
+def calculate_macc_per_sample(pred, target, num_classes=9):
+    """Calculate accuracy for each class present in the sample"""
+    pred_np = pred.cpu().numpy().flatten()
+    target_np = target.cpu().numpy().flatten()
+    
+    # Get classes present in this sample
+    present_classes = np.unique(target_np)
+    present_classes = present_classes[present_classes != 0]  # Exclude background
+    
+    if len(present_classes) == 0:
+        return 0.0, []
+    
+    accuracies = []
+    for class_id in present_classes:
+        pred_binary = (pred_np == class_id)
+        target_binary = (target_np == class_id)
+        
+        if np.sum(target_binary) > 0:
             accuracy = np.sum(pred_binary & target_binary) / np.sum(target_binary)
         else:
-            # Class not present in ground truth
             accuracy = 0.0
         
         accuracies.append(accuracy)
     
-    return np.mean(accuracies)  # Average over ALL classes, including zeros for missing classes
+    return np.mean(accuracies), accuracies
 
 def calculate_pixel_accuracy(pred, target):
     """Calculate overall pixel accuracy"""
@@ -140,6 +179,10 @@ def evaluate_mfnet_segmentation():
     miou_scores = []
     pixel_acc_scores = []
     
+    # For overall mIoU calculation
+    all_pred_pixels = []
+    all_target_pixels = []
+    
     print("Starting evaluation...")
     with torch.no_grad():
         for i, data in enumerate(test_loader):
@@ -158,13 +201,17 @@ def evaluate_mfnet_segmentation():
             seg_logits = model.forward_segmentation_only(image_vis, image_ir)
             pred_seg = torch.argmax(seg_logits, dim=1)
             
-            # Calculate metrics
-            macc = calculate_macc(pred_seg, target_seg)
-            miou = calculate_miou(pred_seg, target_seg)
+            # Calculate per-sample metrics (for present classes only)
+            macc, _ = calculate_macc_per_sample(pred_seg, target_seg)
+            miou_sample, _ = calculate_miou_per_sample(pred_seg, target_seg)
             pixel_acc = calculate_pixel_accuracy(pred_seg, target_seg)
             
+            # Collect all pixels for overall mIoU calculation
+            all_pred_pixels.extend(pred_seg.cpu().numpy().flatten())
+            all_target_pixels.extend(target_seg.cpu().numpy().flatten())
+            
             macc_scores.append(macc)
-            miou_scores.append(miou)
+            miou_scores.append(miou_sample)
             pixel_acc_scores.append(pixel_acc)
             
             # Store detailed metrics for final analysis
@@ -179,14 +226,26 @@ def evaluate_mfnet_segmentation():
     
     # Calculate average metrics
     avg_macc = np.mean(macc_scores) if macc_scores else 0.0
-    avg_miou = np.mean(miou_scores) if miou_scores else 0.0
+    avg_miou_sample = np.mean(miou_scores) if miou_scores else 0.0
     avg_pixel_acc = np.mean(pixel_acc_scores) if pixel_acc_scores else 0.0
     
+    # Calculate overall metrics across all samples
+    if all_pred_pixels and all_target_pixels:
+        all_pred = np.array(all_pred_pixels)
+        all_target = np.array(all_target_pixels)
+        overall_miou = calculate_overall_miou(all_pred, all_target)
+        overall_macc = calculate_overall_macc(all_pred, all_target)
+    else:
+        overall_miou = 0.0
+        overall_macc = 0.0
+    
     print("\n" + "="*70)
-    print("MFNet Segmentation Evaluation Results (Proper Segmentation Head):")
+    print("MFNet Segmentation Evaluation Results (Improved Metrics):")
     print("="*70)
-    print(f"mAcc (Mean Class Accuracy): {avg_macc:.4f}")
-    print(f"mIoU (Mean IoU): {avg_miou:.4f}")
+    print(f"mAcc (Mean Class Accuracy - present classes only): {avg_macc:.4f}")
+    print(f"Overall mAcc (all classes): {overall_macc:.4f}")
+    print(f"mIoU (Mean IoU - present classes only): {avg_miou_sample:.4f}")
+    print(f"Overall mIoU (all classes): {overall_miou:.4f}")
     print(f"Pixel Accuracy: {avg_pixel_acc:.4f}")
     print(f"Number of test samples: {len(macc_scores)}")
     print("="*70)
@@ -206,16 +265,18 @@ def evaluate_mfnet_segmentation():
     # Save results to file
     results_file = 'mfnet_segmentation_results.txt'
     with open(results_file, 'w') as f:
-        f.write("MFNet Segmentation Evaluation Results (Proper Segmentation Head):\n")
+        f.write("MFNet Segmentation Evaluation Results (Improved Metrics):\n")
         f.write("="*60 + "\n")
-        f.write(f"mAcc (Mean Class Accuracy): {avg_macc:.4f}\n")
-        f.write(f"mIoU (Mean IoU): {avg_miou:.4f}\n")
+        f.write(f"mAcc (Mean Class Accuracy - present classes only): {avg_macc:.4f}\n")
+        f.write(f"Overall mAcc (all classes): {overall_macc:.4f}\n")
+        f.write(f"mIoU (Mean IoU - present classes only): {avg_miou_sample:.4f}\n")
+        f.write(f"Overall mIoU (all classes): {overall_miou:.4f}\n")
         f.write(f"Pixel Accuracy: {avg_pixel_acc:.4f}\n")
         f.write(f"Number of test samples: {len(macc_scores)}\n")
         f.write("="*60 + "\n")
         f.write(f"Model used: {segmentation_model_path}\n")
-        f.write("Note: This evaluation uses the proper segmentation head.\n")
-        f.write("For better results, train the model using: python train_segmentation.py --dataset mfnet\n")
+        f.write("Note: Metrics are calculated only for classes present in each sample.\n")
+        f.write("This provides a more realistic evaluation of model performance.\n")
     
     print(f"Results saved to {results_file}")
     

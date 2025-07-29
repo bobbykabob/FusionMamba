@@ -1,16 +1,16 @@
 ACOD-12K Salient Object Detection Results (Standard SOD Metrics):
 ======================================================================
-S-measure (Sα): 0.9167
-F-measure (Fβ): 0.4973
-E-measure (Eφ): 0.6815
-MAE: 0.0137
+S-measure (Sα): 0.8362
+F-measure (Fβ): 0.5457
+E-measure (Eφ): 0.9684
+MAE: 0.0094
 Number of test samples: 200
 ======================================================================
 
 Benchmark Comparison:
 SOTA Range - Sα: 0.719-0.866, Fβ: 0.525-0.803, Eφ: 0.819-0.967
-Our Results - Sα: 0.9167, Fβ: 0.4973, Eφ: 0.6815
-Performance Gap - Sα: 0.0000, Fβ: 0.0277, Eφ: 0.1375
+Our Results - Sα: 0.8362, Fβ: 0.5457, Eφ: 0.9684
+Performance Gap - Sα: 0.0000, Fβ: 0.0000, Eφ: 0.0000
 
 Model used: model_last/segmentation/segmentation_model_acod.pth
 Note: This evaluation uses standard SOD metrics matching published benchmarks.

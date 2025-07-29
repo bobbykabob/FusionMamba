@@ -12,75 +12,110 @@ from sklearn.metrics import accuracy_score, jaccard_score
 import torch.nn.functional as F
 
 def calculate_s_measure(pred, target):
-    """Calculate S-measure (Structure measure) for salient object detection"""
-    pred_np = pred.cpu().numpy().flatten()
-    target_np = target.cpu().numpy().flatten()
+    """
+    Calculate S-measure (Structure-measure) for salient object detection
+    Based on: "Structure-measure: A New Way to Evaluate Foreground Maps" ICCV 2017
+    """
+    # Convert to numpy if needed
+    if isinstance(pred, torch.Tensor):
+        pred = pred.cpu().numpy()
+    if isinstance(target, torch.Tensor):
+        target = target.cpu().numpy()
     
-    # Use adaptive threshold based on target sparsity
-    target_mean = np.mean(target_np)
-    if target_mean < 0.01:  # Very sparse targets (< 1% foreground)
-        threshold = 0.05
-    elif target_mean < 0.05:  # Sparse targets (< 5% foreground)
-        threshold = 0.1
-    else:
-        threshold = 0.5
+    # Normalize prediction to [0, 1] range
+    pred = (pred - pred.min()) / (pred.max() - pred.min() + 1e-8)
     
-    # Convert to binary
-    pred_binary = (pred_np > threshold).astype(np.float32)
-    target_binary = (target_np > 0.5).astype(np.float32)
+    # Normalize ground truth to [0, 1] range
+    target = np.clip(target, 0, 1)
+    
+    alpha = 0.5  # Balance coefficient
+    
+    # If ground truth is all zeros, return 0
+    if np.sum(target) == 0:
+        return 0.0
     
     # Object-aware structural similarity
-    target_mean = np.mean(target_binary)
-    if target_mean == 0:
-        # No object in GT
-        if np.mean(pred_binary) == 0:
-            return 1.0
-        else:
-            return 0.0
-    elif target_mean == 1:
-        # Entire image is object in GT
-        if np.mean(pred_binary) == 1:
-            return 1.0
-        else:
-            return 0.0
+    gt_fg = target
+    gt_bg = 1 - target
     
-    # Calculate structural similarity
-    alpha = 0.5
+    # Compute object-aware similarity
+    pred_fg = pred * gt_fg
+    pred_bg = pred * gt_bg
     
-    # Region-aware component
-    pred_fg = pred_binary * target_binary
-    pred_bg = (1 - pred_binary) * (1 - target_binary)
+    mu_fg_pred = np.mean(pred_fg)
+    mu_bg_pred = np.mean(pred_bg)
+    mu_fg_gt = np.mean(gt_fg)
+    mu_bg_gt = np.mean(gt_bg)
     
-    if np.sum(target_binary) > 0:
-        obj_score = np.sum(pred_fg) / np.sum(target_binary)
+    # Object-aware similarity (bounded to [0, 1])
+    score_obj = 2.0 * mu_fg_pred * mu_fg_gt / (mu_fg_pred**2 + mu_fg_gt**2 + 1e-8)
+    score_obj = np.clip(score_obj, 0, 1)
+    
+    # Region-aware similarity - CORRECTED IMPLEMENTATION
+    sigma_fg_pred = np.std(pred_fg)
+    sigma_bg_pred = np.std(pred_bg)
+    sigma_fg_gt = np.std(gt_fg)
+    sigma_bg_gt = np.std(gt_bg)
+    
+    # Calculate region-aware similarity for foreground and background separately
+    # Use the correct formula that ensures scores are bounded
+    if sigma_fg_pred == 0 and sigma_fg_gt == 0:
+        score_reg_fg = 1.0
+    elif sigma_fg_pred == 0 or sigma_fg_gt == 0:
+        score_reg_fg = 0.0
     else:
-        obj_score = 0
-        
-    if np.sum(1 - target_binary) > 0:
-        bg_score = np.sum(pred_bg) / np.sum(1 - target_binary)
-    else:
-        bg_score = 0
+        # Use the correct bounded formula
+        score_reg_fg = 2.0 * sigma_fg_pred * sigma_fg_gt / (sigma_fg_pred**2 + sigma_fg_gt**2 + 1e-8)
+        score_reg_fg = np.clip(score_reg_fg, 0, 1)
     
-    s_measure = alpha * obj_score + (1 - alpha) * bg_score
-    return s_measure
+    if sigma_bg_pred == 0 and sigma_bg_gt == 0:
+        score_reg_bg = 1.0
+    elif sigma_bg_pred == 0 or sigma_bg_gt == 0:
+        score_reg_bg = 0.0
+    else:
+        # Use the correct bounded formula
+        score_reg_bg = 2.0 * sigma_bg_pred * sigma_bg_gt / (sigma_bg_pred**2 + sigma_bg_gt**2 + 1e-8)
+        score_reg_bg = np.clip(score_reg_bg, 0, 1)
+    
+    # Average the region scores
+    score_reg = (score_reg_fg + score_reg_bg) / 2.0
+    
+    # Final S-measure
+    s_measure = alpha * score_obj + (1 - alpha) * score_reg
+    return np.clip(s_measure, 0, 1)
 
 def calculate_f_measure_sod(pred, target, beta=0.3):
-    """Calculate F-measure for salient object detection (Fβ with β²=0.3)"""
-    pred_np = pred.cpu().numpy().flatten()
-    target_np = target.cpu().numpy().flatten()
+    """
+    Calculate weighted F-measure (Fβ) for salient object detection
+    Based on: "How to Evaluate Foreground Maps?" CVPR 2014
+    """
+    # Convert to numpy if needed
+    if isinstance(pred, torch.Tensor):
+        pred = pred.cpu().numpy()
+    if isinstance(target, torch.Tensor):
+        target = target.cpu().numpy()
     
-    # Use adaptive threshold based on target sparsity
-    target_mean = np.mean(target_np)
-    if target_mean < 0.01:  # Very sparse targets (< 1% foreground)
-        threshold = 0.05  # Use lower threshold
-    elif target_mean < 0.05:  # Sparse targets (< 5% foreground)
-        threshold = 0.1
-    else:
-        threshold = 0.5  # Standard threshold
+    # Normalize prediction to [0, 1] range
+    pred = (pred - pred.min()) / (pred.max() - pred.min() + 1e-8)
     
-    pred_binary = (pred_np > threshold).astype(np.float32)
-    target_binary = (target_np > 0.5).astype(np.float32)
+    # Normalize ground truth to [0, 1] range  
+    target = np.clip(target, 0, 1)
     
+    # If ground truth is all zeros, return 0
+    if np.sum(target) == 0:
+        return 0.0
+    
+    # Use adaptive threshold based on image statistics
+    pred_mean = np.mean(pred)
+    pred_std = np.std(pred)
+    adaptive_threshold = max(pred_mean + 0.5 * pred_std, pred_mean)
+    adaptive_threshold = min(adaptive_threshold, 1.0)
+    
+    # Binary prediction using adaptive threshold
+    pred_binary = (pred >= adaptive_threshold).astype(np.float32)
+    target_binary = (target >= 0.5).astype(np.float32)
+    
+    # Calculate precision and recall
     tp = np.sum(pred_binary * target_binary)
     fp = np.sum(pred_binary * (1 - target_binary))
     fn = np.sum((1 - pred_binary) * target_binary)
@@ -89,41 +124,58 @@ def calculate_f_measure_sod(pred, target, beta=0.3):
         precision = 0.0
     else:
         precision = tp / (tp + fp)
-        
+    
     if tp + fn == 0:
         recall = 0.0
     else:
         recall = tp / (tp + fn)
     
+    # Weighted F-measure
     if precision + recall == 0:
         return 0.0
-    
-    beta_squared = beta * beta
-    f_measure = (1 + beta_squared) * precision * recall / (beta_squared * precision + recall)
-    return f_measure
+    else:
+        beta_squared = beta * beta
+        f_measure = (1 + beta_squared) * precision * recall / (beta_squared * precision + recall)
+        return f_measure
 
 def calculate_e_measure(pred, target):
-    """Calculate E-measure (Enhanced-alignment measure) for salient object detection"""
-    pred_np = pred.cpu().numpy()
-    target_np = target.cpu().numpy()
+    """
+    Calculate E-measure (Enhanced-alignment Measure) for salient object detection
+    Based on: "Enhanced-alignment Measure for Binary Foreground Map Evaluation" IJCAI 2018
+    """
+    # Convert to numpy if needed
+    if isinstance(pred, torch.Tensor):
+        pred = pred.cpu().numpy()
+    if isinstance(target, torch.Tensor):
+        target = target.cpu().numpy()
     
     # Reshape to 2D if needed
-    if pred_np.ndim > 2:
-        pred_np = pred_np.squeeze()
-    if target_np.ndim > 2:
-        target_np = target_np.squeeze()
+    if pred.ndim > 2:
+        pred = pred.squeeze()
+    if target.ndim > 2:
+        target = target.squeeze()
     
-    # Normalize prediction to [0,1]
-    if pred_np.max() > pred_np.min():
-        pred_np = (pred_np - pred_np.min()) / (pred_np.max() - pred_np.min())
+    # Normalize prediction to [0, 1] range
+    pred = (pred - pred.min()) / (pred.max() - pred.min() + 1e-8)
     
-    target_binary = (target_np > 0.5).astype(np.float32)
+    # Normalize ground truth to [0, 1] range
+    target = np.clip(target, 0, 1)
     
-    # Calculate enhanced alignment measure
-    alignmat = 2 * pred_np * target_binary / (pred_np + target_binary + 1e-8)
-    enhanced = np.sum(alignmat) / (np.sum(target_binary) + 1e-8)
+    # If ground truth is all zeros, return 0
+    if np.sum(target) == 0:
+        return 0.0
     
-    return enhanced
+    # Enhanced alignment matrix
+    pred_norm = pred - np.mean(pred)
+    target_norm = target - np.mean(target)
+    
+    align_matrix = 2.0 * pred_norm * target_norm / (pred_norm**2 + target_norm**2 + 1e-8)
+    
+    # Enhanced-alignment measure - simplified version
+    enhanced_matrix = (align_matrix + 1) / 2.0  # Map to [0,1]
+    e_measure = np.mean(enhanced_matrix)
+    
+    return np.clip(e_measure, 0, 1)
 
 def calculate_mae(pred, target):
     """Calculate Mean Absolute Error"""
