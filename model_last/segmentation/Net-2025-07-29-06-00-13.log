@@ -1,0 +1,24 @@
+INFO train_segmentation.py(180): Starting segmentation training for mfnet
+INFO train_segmentation.py(181): Mode: segmentation, Epochs: 20, LR: 0.0002
+INFO train_segmentation.py(182): Batch size: 2, Dataset length: 1569
+INFO train_segmentation.py(285): Epoch [1/20] - Total Loss: 0.0178, Seg Loss: 0.0178, mIoU: 0.7119, Time: 196.21s
+INFO train_segmentation.py(285): Epoch [2/20] - Total Loss: 0.0079, Seg Loss: 0.0079, mIoU: 0.8030, Time: 183.56s
+INFO train_segmentation.py(285): Epoch [3/20] - Total Loss: 0.0149, Seg Loss: 0.0149, mIoU: 0.7446, Time: 192.53s
+INFO train_segmentation.py(285): Epoch [4/20] - Total Loss: 0.0074, Seg Loss: 0.0074, mIoU: 0.8079, Time: 192.70s
+INFO train_segmentation.py(285): Epoch [5/20] - Total Loss: 0.0085, Seg Loss: 0.0085, mIoU: 0.8124, Time: 191.85s
+INFO train_segmentation.py(285): Epoch [6/20] - Total Loss: 0.0208, Seg Loss: 0.0208, mIoU: 0.7064, Time: 190.67s
+INFO train_segmentation.py(285): Epoch [7/20] - Total Loss: 0.0071, Seg Loss: 0.0071, mIoU: 0.8062, Time: 189.63s
+INFO train_segmentation.py(285): Epoch [8/20] - Total Loss: 0.0072, Seg Loss: 0.0072, mIoU: 0.8294, Time: 189.78s
+INFO train_segmentation.py(285): Epoch [9/20] - Total Loss: 0.0194, Seg Loss: 0.0194, mIoU: 0.7761, Time: 189.68s
+INFO train_segmentation.py(285): Epoch [10/20] - Total Loss: 0.0072, Seg Loss: 0.0072, mIoU: 0.8319, Time: 189.00s
+INFO train_segmentation.py(285): Epoch [11/20] - Total Loss: 0.0050, Seg Loss: 0.0050, mIoU: 0.8731, Time: 190.23s
+INFO train_segmentation.py(285): Epoch [12/20] - Total Loss: 0.0049, Seg Loss: 0.0049, mIoU: 0.8799, Time: 190.10s
+INFO train_segmentation.py(285): Epoch [13/20] - Total Loss: 0.0048, Seg Loss: 0.0048, mIoU: 0.8793, Time: 188.96s
+INFO train_segmentation.py(285): Epoch [14/20] - Total Loss: 0.0084, Seg Loss: 0.0084, mIoU: 0.8532, Time: 189.99s
+INFO train_segmentation.py(285): Epoch [15/20] - Total Loss: 0.0069, Seg Loss: 0.0069, mIoU: 0.8732, Time: 197.50s
+INFO train_segmentation.py(285): Epoch [16/20] - Total Loss: 0.0048, Seg Loss: 0.0048, mIoU: 0.8726, Time: 190.65s
+INFO train_segmentation.py(285): Epoch [17/20] - Total Loss: 0.0031, Seg Loss: 0.0031, mIoU: 0.9124, Time: 189.17s
+INFO train_segmentation.py(285): Epoch [18/20] - Total Loss: 0.0030, Seg Loss: 0.0030, mIoU: 0.9219, Time: 190.61s
+INFO train_segmentation.py(285): Epoch [19/20] - Total Loss: 0.0029, Seg Loss: 0.0029, mIoU: 0.9250, Time: 188.97s
+INFO train_segmentation.py(285): Epoch [20/20] - Total Loss: 0.0028, Seg Loss: 0.0028, mIoU: 0.9182, Time: 190.66s
+INFO train_segmentation.py(295): Training completed successfully!

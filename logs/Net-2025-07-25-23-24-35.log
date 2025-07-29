@@ -1,0 +1,14 @@
+INFO train.py(102): Loaded acod model from: model_last/my_cross/fusion_model_acod.pth
+INFO train.py(124): Training Fusion Model start~
+INFO train.py(189): step: 10/766, loss_total: 28.6330, loss_in: 0.0098, loss_grad: 0.1376, ssim_loss: 0.2840, eta: 0:11:13, time: 8.9058
+INFO train.py(189): step: 20/766, loss_total: 28.2010, loss_in: 0.0164, loss_grad: 0.1837, ssim_loss: 0.2785, eta: 0:08:19, time: 4.4745
+INFO train.py(189): step: 30/766, loss_total: 28.5457, loss_in: 0.0179, loss_grad: 0.1645, ssim_loss: 0.2820, eta: 0:07:18, time: 4.4878
+INFO train.py(189): step: 40/766, loss_total: 31.9923, loss_in: 0.0178, loss_grad: 0.1627, ssim_loss: 0.3165, eta: 0:06:43, time: 4.3581
+INFO train.py(189): step: 50/766, loss_total: 28.2755, loss_in: 0.0140, loss_grad: 0.1709, ssim_loss: 0.2796, eta: 0:06:16, time: 4.0769
+INFO train.py(189): step: 60/766, loss_total: 26.4117, loss_in: 0.0158, loss_grad: 0.1623, ssim_loss: 0.2609, eta: 0:05:55, time: 3.8805
+INFO train.py(189): step: 70/766, loss_total: 23.6809, loss_in: 0.0159, loss_grad: 0.1386, ssim_loss: 0.2338, eta: 0:05:41, time: 4.1555
+INFO train.py(189): step: 80/766, loss_total: 27.6929, loss_in: 0.0158, loss_grad: 0.1624, ssim_loss: 0.2737, eta: 0:05:33, time: 4.5499
+INFO train.py(189): step: 90/766, loss_total: 24.2402, loss_in: 0.0180, loss_grad: 0.1684, ssim_loss: 0.2389, eta: 0:05:26, time: 4.5541
+INFO train.py(189): step: 100/766, loss_total: 26.9499, loss_in: 0.0154, loss_grad: 0.1635, ssim_loss: 0.2663, eta: 0:05:19, time: 4.5847
+INFO train.py(189): step: 110/766, loss_total: 23.0003, loss_in: 0.0129, loss_grad: 0.1443, ssim_loss: 0.2273, eta: 0:05:13, time: 4.5156
+INFO train.py(189): step: 120/766, loss_total: 27.1919, loss_in: 0.0148, loss_grad: 0.1527, ssim_loss: 0.2689, eta: 0:05:06, time: 4.3291

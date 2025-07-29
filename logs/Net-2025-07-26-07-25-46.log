@@ -1,0 +1,31 @@
+INFO train.py(102): Loaded mfnet model from: model_last/my_cross/fusion_model_mfnet.pth
+INFO train.py(124): Training Fusion Model start~
+INFO train.py(189): step: 10/261, loss_total: 29.1179, loss_in: 0.0642, loss_grad: 0.4898, ssim_loss: 0.2799, eta: 0:02:44, time: 6.5423
+INFO train.py(189): step: 20/261, loss_total: 27.2902, loss_in: 0.0489, loss_grad: 0.3899, ssim_loss: 0.2641, eta: 0:02:04, time: 3.7843
+INFO train.py(189): step: 30/261, loss_total: 26.5303, loss_in: 0.0647, loss_grad: 0.4936, ssim_loss: 0.2539, eta: 0:01:49, time: 3.8576
+INFO train.py(189): step: 40/261, loss_total: 25.8427, loss_in: 0.0467, loss_grad: 0.3823, ssim_loss: 0.2499, eta: 0:01:39, time: 3.8108
+INFO train.py(189): step: 50/261, loss_total: 25.6120, loss_in: 0.0366, loss_grad: 0.3267, ssim_loss: 0.2492, eta: 0:01:32, time: 3.8890
+INFO train.py(189): step: 60/261, loss_total: 27.8663, loss_in: 0.0552, loss_grad: 0.4612, ssim_loss: 0.2685, eta: 0:01:26, time: 3.8921
+INFO train.py(189): step: 70/261, loss_total: 27.8829, loss_in: 0.0766, loss_grad: 0.5525, ssim_loss: 0.2656, eta: 0:01:20, time: 3.8404
+INFO train.py(189): step: 80/261, loss_total: 24.9320, loss_in: 0.0498, loss_grad: 0.3904, ssim_loss: 0.2404, eta: 0:01:15, time: 3.8465
+INFO train.py(189): step: 90/261, loss_total: 26.3560, loss_in: 0.0660, loss_grad: 0.4758, ssim_loss: 0.2522, eta: 0:01:11, time: 3.9640
+INFO train.py(189): step: 100/261, loss_total: 26.8551, loss_in: 0.0587, loss_grad: 0.4577, ssim_loss: 0.2581, eta: 0:01:06, time: 3.8496
+INFO train.py(189): step: 110/261, loss_total: 27.1933, loss_in: 0.0569, loss_grad: 0.4385, ssim_loss: 0.2619, eta: 0:01:01, time: 3.8673
+INFO train.py(189): step: 120/261, loss_total: 26.3391, loss_in: 0.0478, loss_grad: 0.3937, ssim_loss: 0.2547, eta: 0:00:57, time: 3.7996
+INFO train.py(189): step: 130/261, loss_total: 21.3469, loss_in: 0.0140, loss_grad: 0.1633, ssim_loss: 0.2104, eta: 0:00:53, time: 3.9343
+INFO train.py(189): step: 140/261, loss_total: 29.0703, loss_in: 0.0911, loss_grad: 0.6702, ssim_loss: 0.2749, eta: 0:00:49, time: 3.9233
+INFO train.py(189): step: 150/261, loss_total: 25.0994, loss_in: 0.0610, loss_grad: 0.4645, ssim_loss: 0.2402, eta: 0:00:44, time: 3.8710
+INFO train.py(189): step: 160/261, loss_total: 24.5947, loss_in: 0.0300, loss_grad: 0.2813, ssim_loss: 0.2401, eta: 0:00:40, time: 4.0735
+INFO train.py(189): step: 170/261, loss_total: 24.1456, loss_in: 0.0402, loss_grad: 0.3237, ssim_loss: 0.2342, eta: 0:00:36, time: 4.0334
+INFO train.py(189): step: 180/261, loss_total: 25.4778, loss_in: 0.0542, loss_grad: 0.3750, ssim_loss: 0.2456, eta: 0:00:32, time: 3.9258
+INFO train.py(189): step: 190/261, loss_total: 23.9214, loss_in: 0.0342, loss_grad: 0.3123, ssim_loss: 0.2327, eta: 0:00:28, time: 4.0346
+INFO train.py(189): step: 200/261, loss_total: 23.3422, loss_in: 0.0286, loss_grad: 0.2398, ssim_loss: 0.2282, eta: 0:00:24, time: 4.0466
+INFO train.py(189): step: 210/261, loss_total: 29.2737, loss_in: 0.0889, loss_grad: 0.6488, ssim_loss: 0.2774, eta: 0:00:20, time: 3.9273
+INFO train.py(189): step: 220/261, loss_total: 24.3299, loss_in: 0.0482, loss_grad: 0.3778, ssim_loss: 0.2347, eta: 0:00:16, time: 4.0131
+INFO train.py(189): step: 230/261, loss_total: 25.4608, loss_in: 0.0440, loss_grad: 0.3913, ssim_loss: 0.2463, eta: 0:00:12, time: 3.9360
+INFO train.py(189): step: 240/261, loss_total: 28.9121, loss_in: 0.0718, loss_grad: 0.5568, ssim_loss: 0.2764, eta: 0:00:08, time: 4.0282
+INFO train.py(189): step: 250/261, loss_total: 25.3071, loss_in: 0.0611, loss_grad: 0.4856, ssim_loss: 0.2421, eta: 0:00:04, time: 4.0180
+INFO train.py(189): step: 260/261, loss_total: 25.2574, loss_in: 0.0295, loss_grad: 0.2792, ssim_loss: 0.2468, eta: 0:00:00, time: 3.9547
+INFO train.py(200): MFNET Model Save to: model_last/my_cross/fusion_model_mfnet.pth
+INFO train.py(201): 
+

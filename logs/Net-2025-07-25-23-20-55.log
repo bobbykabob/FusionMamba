@@ -1,0 +1,2 @@
+INFO train.py(98): Loaded acod model from: model_last/my_cross/fusion_model_acod.pth
+INFO train.py(120): Training Fusion Model start~

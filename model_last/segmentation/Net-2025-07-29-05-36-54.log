@@ -1,0 +1,9 @@
+INFO train_segmentation.py(180): Starting segmentation training for mfnet
+INFO train_segmentation.py(181): Mode: segmentation, Epochs: 5, LR: 0.0002
+INFO train_segmentation.py(182): Batch size: 2, Dataset length: 1569
+INFO train_segmentation.py(285): Epoch [1/5] - Total Loss: 0.1417, Seg Loss: 0.1417, mIoU: 0.3592, Time: 195.83s
+INFO train_segmentation.py(285): Epoch [2/5] - Total Loss: 0.0417, Seg Loss: 0.0417, mIoU: 0.5159, Time: 189.07s
+INFO train_segmentation.py(285): Epoch [3/5] - Total Loss: 0.0284, Seg Loss: 0.0284, mIoU: 0.6068, Time: 189.67s
+INFO train_segmentation.py(285): Epoch [4/5] - Total Loss: 0.0148, Seg Loss: 0.0148, mIoU: 0.7136, Time: 190.19s
+INFO train_segmentation.py(285): Epoch [5/5] - Total Loss: 0.0109, Seg Loss: 0.0109, mIoU: 0.7595, Time: 189.66s
+INFO train_segmentation.py(295): Training completed successfully!

@@ -1,0 +1,4 @@
+INFO train_segmentation.py(180): Starting segmentation training for acod
+INFO train_segmentation.py(181): Mode: segmentation, Epochs: 2, LR: 0.0002
+INFO train_segmentation.py(182): Batch size: 1, Dataset length: 4600
+INFO train_segmentation.py(295): Training completed successfully!

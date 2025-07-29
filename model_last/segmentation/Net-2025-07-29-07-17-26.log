@@ -1,0 +1,6 @@
+INFO train_segmentation.py(180): Starting segmentation training for acod
+INFO train_segmentation.py(181): Mode: segmentation, Epochs: 10, LR: 0.0001
+INFO train_segmentation.py(182): Batch size: 1, Dataset length: 4600
+INFO train_segmentation.py(285): Epoch [1/10] - Total Loss: 0.0400, Seg Loss: 0.0400, mIoU: 0.7632, Time: 976.41s
+INFO train_segmentation.py(285): Epoch [2/10] - Total Loss: 0.0398, Seg Loss: 0.0398, mIoU: 0.7656, Time: 957.92s
+INFO train_segmentation.py(285): Epoch [3/10] - Total Loss: 0.0377, Seg Loss: 0.0377, mIoU: 0.7740, Time: 960.18s

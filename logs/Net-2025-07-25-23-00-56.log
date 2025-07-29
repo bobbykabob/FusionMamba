@@ -1,0 +1,19 @@
+INFO train.py(98): Training Fusion Model start~
+INFO train.py(163): step: 10/1532, loss_total: 35.0182, loss_in: 0.1321, loss_grad: 1.2894, ssim_loss: 0.3241, eta: 0:22:47, time: 8.9867
+INFO train.py(163): step: 20/1532, loss_total: 36.2760, loss_in: 0.1203, loss_grad: 0.9095, ssim_loss: 0.3416, eta: 0:16:23, time: 4.0257
+INFO train.py(163): step: 30/1532, loss_total: 29.8657, loss_in: 0.1288, loss_grad: 0.9735, ssim_loss: 0.2760, eta: 0:14:18, time: 4.1401
+INFO train.py(163): step: 40/1532, loss_total: 35.5150, loss_in: 0.1348, loss_grad: 0.9127, ssim_loss: 0.3325, eta: 0:13:12, time: 4.0993
+INFO train.py(163): step: 50/1532, loss_total: 34.9941, loss_in: 0.1321, loss_grad: 0.9001, ssim_loss: 0.3277, eta: 0:12:36, time: 4.2587
+INFO train.py(163): step: 60/1532, loss_total: 32.8643, loss_in: 0.1188, loss_grad: 0.7452, ssim_loss: 0.3093, eta: 0:12:06, time: 4.1223
+INFO train.py(163): step: 70/1532, loss_total: 31.2703, loss_in: 0.1281, loss_grad: 0.7959, ssim_loss: 0.2919, eta: 0:11:50, time: 4.4077
+INFO train.py(163): step: 80/1532, loss_total: 31.3534, loss_in: 0.1242, loss_grad: 0.6642, ssim_loss: 0.2945, eta: 0:11:33, time: 4.1561
+INFO train.py(163): step: 90/1532, loss_total: 34.2725, loss_in: 0.1044, loss_grad: 0.6782, ssim_loss: 0.3255, eta: 0:11:20, time: 4.2546
+INFO train.py(163): step: 100/1532, loss_total: 33.3159, loss_in: 0.1402, loss_grad: 0.7552, ssim_loss: 0.3116, eta: 0:11:11, time: 4.4483
+INFO train.py(163): step: 110/1532, loss_total: 32.1424, loss_in: 0.1223, loss_grad: 0.7028, ssim_loss: 0.3022, eta: 0:11:01, time: 4.2688
+INFO train.py(163): step: 120/1532, loss_total: 32.1428, loss_in: 0.1268, loss_grad: 0.7036, ssim_loss: 0.3017, eta: 0:10:51, time: 4.1645
+INFO train.py(163): step: 130/1532, loss_total: 30.2000, loss_in: 0.0952, loss_grad: 0.6122, ssim_loss: 0.2864, eta: 0:10:41, time: 4.1806
+INFO train.py(163): step: 140/1532, loss_total: 30.7367, loss_in: 0.1308, loss_grad: 0.7086, ssim_loss: 0.2872, eta: 0:10:32, time: 4.1439
+INFO train.py(163): step: 150/1532, loss_total: 32.7112, loss_in: 0.1332, loss_grad: 0.6662, ssim_loss: 0.3071, eta: 0:10:26, time: 4.3509
+INFO train.py(163): step: 160/1532, loss_total: 27.8326, loss_in: 0.1223, loss_grad: 0.6433, ssim_loss: 0.2597, eta: 0:10:20, time: 4.3070
+INFO train.py(163): step: 170/1532, loss_total: 31.1618, loss_in: 0.1238, loss_grad: 0.6460, ssim_loss: 0.2928, eta: 0:10:13, time: 4.2104
+INFO train.py(163): step: 180/1532, loss_total: 24.4921, loss_in: 0.1036, loss_grad: 0.6095, ssim_loss: 0.2285, eta: 0:10:07, time: 4.3238

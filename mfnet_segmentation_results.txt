@@ -1,0 +1,10 @@
+MFNet Segmentation Evaluation Results (Proper Segmentation Head):
+============================================================
+mAcc (Mean Class Accuracy): 0.3847
+mIoU (Mean IoU): 0.3803
+Pixel Accuracy: 0.9993
+Number of test samples: 393
+============================================================
+Model used: model_last/segmentation/segmentation_model_mfnet.pth
+Note: This evaluation uses the proper segmentation head.
+For better results, train the model using: python train_segmentation.py --dataset mfnet

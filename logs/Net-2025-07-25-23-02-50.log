@@ -1,0 +1,5 @@
+INFO train.py(87): Loaded previous best model from: model_last/my_cross/fusion_model.pth
+INFO train.py(109): Training Fusion Model start~
+INFO train.py(174): step: 10/1532, loss_total: 24.4073, loss_in: 0.0134, loss_grad: 0.1577, ssim_loss: 0.2412, eta: 0:22:34, time: 8.8992
+INFO train.py(174): step: 20/1532, loss_total: 26.1990, loss_in: 0.0112, loss_grad: 0.1704, ssim_loss: 0.2592, eta: 0:16:51, time: 4.4760
+INFO train.py(174): step: 30/1532, loss_total: 24.9446, loss_in: 0.0186, loss_grad: 0.1562, ssim_loss: 0.2460, eta: 0:14:54, time: 4.4903

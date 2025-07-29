@@ -1,0 +1,3 @@
+INFO train.py(105): No pst900 model found, starting from scratch
+INFO train.py(124): Training Fusion Model start~
+INFO train.py(189): step: 10/70, loss_total: 33.1010, loss_in: 0.0674, loss_grad: 0.7196, ssim_loss: 0.3171, eta: 0:00:25, time: 4.2403

@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+*.pyzw
+*.pyzwz
+model_last/my_cross/fusion_model_acod.pth
+model_last/my_cross/fusion_model_mfnet.pth
+model_last/my_cross/fusion_model_pst900.pth
+model_last/segmentation/segmentation_model_acod.pth
+model_last/segmentation/segmentation_model_mfnet.pth
+*.pth
+model_last/
