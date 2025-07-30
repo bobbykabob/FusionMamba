@@ -1,31 +1,4 @@
 # FusionMamba: Dynamic Feature Enhancement for Multimodal Image Fusion with Mamba
-ACOD-12k @ 5 epochs
-S-measure (Sα): 0.733
-F-measure (Fβw): 0.706
-E-measure (Eφ): 0.569
-
-@ 40 epochs:
-S-measure (Sα): 0.792
-F-measure (Fβw): 0.745
-E-measure (Eφ): 0.751
-
-@ 80 epochs:
-
-MFNet @ 1 epoch:
-S-measure (Sα):   0.191
-F-measure (Fβw):  0.667
-E-measure (Eφ):   0.430
-
-@ 10 epochs:
-
-
-PST900 @ 1 epoch: 
-S-measure (Sα): 0.0132 
-F-measure (Fβ): 0.6755 
-E-measure (Eφ): 0.7118 
-
-@ 10 epochs:
-
 
 [Arxiv](https://arxiv.org/abs/2404.09498)| [Code](https://github.com/millieXie/FusionMamba) | 
 
