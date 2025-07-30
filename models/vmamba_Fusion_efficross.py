@@ -930,7 +930,7 @@ class VSSM_Fusion(nn.Module):
 
 
 class SegmentationHead(nn.Module):
-    """Segmentation head for multi-class semantic segmentation
+    """Improved segmentation head with multi-scale processing and attention
     
     Args:
         in_channels (int): Number of input channels from the backbone
@@ -939,19 +939,57 @@ class SegmentationHead(nn.Module):
     """
     def __init__(self, in_channels, num_classes, dropout_rate=0.1):
         super().__init__()
+        
+        # Multi-scale feature processing
+        self.conv1 = nn.Conv2d(in_channels, in_channels * 2, kernel_size=3, padding=1)
+        self.bn1 = nn.BatchNorm2d(in_channels * 2)
+        self.relu1 = nn.ReLU(inplace=True)
+        
+        self.conv2 = nn.Conv2d(in_channels * 2, in_channels * 2, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(in_channels * 2)
+        self.relu2 = nn.ReLU(inplace=True)
+        
+        # Attention mechanism
+        self.attention = nn.Sequential(
+            nn.Conv2d(in_channels * 2, in_channels * 2, kernel_size=1),
+            nn.Sigmoid()
+        )
+        
+        # Final classification layer
         self.dropout = nn.Dropout(dropout_rate) if dropout_rate > 0 else None
-        self.conv = nn.Conv2d(in_channels, num_classes, kernel_size=1)
+        self.final_conv = nn.Conv2d(in_channels * 2, num_classes, kernel_size=1)
         
         # Initialize weights
-        nn.init.kaiming_normal_(self.conv.weight, mode='fan_out', nonlinearity='relu')
-        if self.conv.bias is not None:
-            nn.init.constant_(self.conv.bias, 0)
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
         
     def forward(self, x):
         # x: [B, C, H, W] - features from backbone
+        
+        # Multi-scale feature processing
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu1(x)
+        
+        x = self.conv2(x)
+        x = self.bn2(x)
+        x = self.relu2(x)
+        
+        # Apply attention
+        att_weights = self.attention(x)
+        x = x * att_weights
+        
+        # Final classification
         if self.dropout is not None:
             x = self.dropout(x)
-        return self.conv(x)  # [B, num_classes, H, W] - logits for each class
+        
+        return self.final_conv(x)  # [B, num_classes, H, W] - logits for each class
 
 
 class VSSM_Fusion_Segmentation(nn.Module):
@@ -981,7 +1019,7 @@ class VSSM_Fusion_Segmentation(nn.Module):
         self.segmentation_head = SegmentationHead(
             in_channels=dims_decoder[-1] // 4,  # 96//4 = 24 channels
             num_classes=num_seg_classes,
-            dropout_rate=drop_rate
+            dropout_rate=0.3  # Increased dropout to reduce overfitting
         )
         
         self.num_seg_classes = num_seg_classes

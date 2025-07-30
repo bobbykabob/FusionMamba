@@ -103,6 +103,35 @@ def calculate_miou(pred, target, num_classes=9):
     
     return np.mean(ious) if ious else 0.0
 
+def calculate_overall_miou(pred_np, target_np, num_classes=5):
+    """Calculate overall mIoU across all samples - only for classes that exist in PST900"""
+    ious = []
+    for class_id in range(num_classes):
+        pred_binary = (pred_np == class_id)
+        target_binary = (target_np == class_id)
+        
+        intersection = np.sum(pred_binary & target_binary)
+        union = np.sum(pred_binary | target_binary)
+        
+        if union > 0:
+            iou = intersection / union
+            ious.append(iou)
+    
+    return np.mean(ious) if ious else 0.0
+
+def calculate_overall_macc(pred_np, target_np, num_classes=5):
+    """Calculate overall mAcc across all samples - only for classes that exist in PST900"""
+    accuracies = []
+    for class_id in range(num_classes):
+        pred_binary = (pred_np == class_id)
+        target_binary = (target_np == class_id)
+        
+        if np.sum(target_binary) > 0:
+            accuracy = np.sum(pred_binary & target_binary) / np.sum(target_binary)
+            accuracies.append(accuracy)
+    
+    return np.mean(accuracies) if accuracies else 0.0
+
 def train_segmentation(args):
     # Setup
     modelpth = 'model_last'
@@ -135,7 +164,7 @@ def train_segmentation(args):
         print(f"No existing model found. Training from scratch...")
     
     # Setup optimizer
-    optimizer = torch.optim.Adam(segmentation_model.parameters(), lr=args.lr, weight_decay=0)
+    optimizer = torch.optim.Adam(segmentation_model.parameters(), lr=args.lr, weight_decay=1e-4)  # Added weight decay
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[int(args.epochs*0.8)], gamma=0.1)
     
     # Setup loss
@@ -193,6 +222,10 @@ def train_segmentation(args):
         epoch_miou = 0.0
         num_batches = 0
         
+        # For overall metrics calculation
+        all_pred_pixels = []
+        all_target_pixels = []
+        
         for i, data in enumerate(train_loader, 0):
             try:
                 if len(data) == 3:  # Has segmentation labels
@@ -241,6 +274,10 @@ def train_segmentation(args):
                             seg_pred = torch.argmax(seg_outputs, dim=1)
                         miou = calculate_miou(seg_pred, seg_labels, num_classes)
                         epoch_miou += miou
+                        
+                        # Collect all predictions and targets for overall metrics
+                        all_pred_pixels.extend(seg_pred.cpu().numpy().flatten())
+                        all_target_pixels.extend(seg_labels.cpu().numpy().flatten())
                 
                 # Backward pass
                 loss.backward()
@@ -268,6 +305,15 @@ def train_segmentation(args):
             avg_seg_loss = epoch_seg_loss / num_batches if epoch_seg_loss > 0 else 0
             avg_miou = epoch_miou / num_batches if epoch_miou > 0 else 0
             
+            # Calculate overall metrics for PST900
+            overall_miou = 0.0
+            overall_macc = 0.0
+            if args.dataset == 'pst900' and all_pred_pixels and all_target_pixels:
+                all_pred = np.array(all_pred_pixels)
+                all_target = np.array(all_target_pixels)
+                overall_miou = calculate_overall_miou(all_pred, all_target, num_classes=5)
+                overall_macc = calculate_overall_macc(all_pred, all_target, num_classes=5)
+            
             epoch_time = time.time() - epoch_start_time
             
             # Log metrics
@@ -278,16 +324,17 @@ def train_segmentation(args):
                 log_msg += f", Fusion Loss: {avg_fusion_loss:.4f}"
             if args.mode in ['both', 'segmentation']:
                 log_msg += f", Seg Loss: {avg_seg_loss:.4f}, mIoU: {avg_miou:.4f}"
+                if args.dataset == 'pst900':
+                    log_msg += f", Overall mIoU: {overall_miou:.4f}, Overall mAcc: {overall_macc:.4f}"
                 
             log_msg += f", Time: {epoch_time:.2f}s"
             
             print(log_msg)
             logger.info(log_msg)
             
-            # Save model checkpoint
-            if (epoch + 1) % 5 == 0 or (epoch + 1) == args.epochs:
-                torch.save(segmentation_model.state_dict(), model_file)
-                print(f"Model saved to {model_file}")
+            # Save model checkpoint every epoch
+            torch.save(segmentation_model.state_dict(), model_file)
+            print(f"Model saved to {model_file}")
     
     # Final save
     torch.save(segmentation_model.state_dict(), model_file)

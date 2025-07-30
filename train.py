@@ -129,7 +129,12 @@ def train_fusion(num=0, logger=None, dataset_name='acod', epochs=1):
         lr_this_epo = lr_start * lr_decay ** (epo - 1)
         for param_group in optimizer.param_groups:
             param_group['lr'] = lr_this_epo
-        for it, (image_vis, image_ir) in enumerate(train_loader):
+        for it, data in enumerate(train_loader):
+            if len(data) == 3:
+                image_vis, image_ir, labels = data
+            else:
+                image_vis, image_ir = data
+                labels = None
             try:
                 fusionmodel.train()
                 image_vis = Variable(image_vis).cuda()

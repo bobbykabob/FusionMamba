@@ -135,7 +135,7 @@ class Fusion_dataset(Dataset):
 
     def _load_pst900_data(self):
         """Load PST900 dataset, only add valid pairs"""
-        data_dir_base = "/data/harris/FusionMamba/PST900/PST900_RGBT_Dataset/train"
+        data_dir_base = "/home/ubuntu/mainva/data/PST900_RGBT_Dataset/train"
         data_dir_vis = os.path.join(data_dir_base, "rgb")      # RGB images
         data_dir_ir = os.path.join(data_dir_base, "thermal")   # Thermal images
         data_dir_labels = os.path.join(data_dir_base, "labels") # Segmentation labels
@@ -167,7 +167,7 @@ class Fusion_dataset(Dataset):
 
     def _load_pst900_test_data(self):
         """Load PST900 test dataset, only add valid pairs"""
-        data_dir_base = "/data/harris/FusionMamba/PST900/PST900_RGBT_Dataset/test"
+        data_dir_base = "/home/ubuntu/mainva/data/PST900_RGBT_Dataset/test"
         data_dir_vis = os.path.join(data_dir_base, "rgb")      # RGB images
         data_dir_ir = os.path.join(data_dir_base, "thermal")   # Thermal images
         data_dir_labels = os.path.join(data_dir_base, "labels") # Segmentation labels

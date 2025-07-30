@@ -1,0 +1,14 @@
+INFO train.py(105): No pst900 model found, starting from scratch
+INFO train.py(124): Training Fusion Model start~
+INFO train.py(194): step: 10/99, loss_total: 32.5551, loss_in: 0.0739, loss_grad: 0.6573, ssim_loss: 0.3116, eta: 0:01:05, time: 7.3104
+INFO train.py(194): step: 20/99, loss_total: 29.6073, loss_in: 0.0890, loss_grad: 0.7377, ssim_loss: 0.2798, eta: 0:00:43, time: 3.7931
+INFO train.py(194): step: 30/99, loss_total: 29.0282, loss_in: 0.0902, loss_grad: 0.6982, ssim_loss: 0.2743, eta: 0:00:34, time: 3.8694
+INFO train.py(194): step: 40/99, loss_total: 29.2200, loss_in: 0.0811, loss_grad: 0.6135, ssim_loss: 0.2780, eta: 0:00:27, time: 3.8205
+INFO train.py(194): step: 50/99, loss_total: 29.4544, loss_in: 0.1265, loss_grad: 0.8839, ssim_loss: 0.2731, eta: 0:00:22, time: 3.7916
+INFO train.py(194): step: 60/99, loss_total: 30.3320, loss_in: 0.1231, loss_grad: 0.9090, ssim_loss: 0.2819, eta: 0:00:17, time: 3.7698
+INFO train.py(194): step: 70/99, loss_total: 27.7255, loss_in: 0.0918, loss_grad: 0.7120, ssim_loss: 0.2610, eta: 0:00:12, time: 3.7669
+INFO train.py(194): step: 80/99, loss_total: 30.0264, loss_in: 0.1000, loss_grad: 0.7534, ssim_loss: 0.2827, eta: 0:00:08, time: 3.7753
+INFO train.py(194): step: 90/99, loss_total: 30.3776, loss_in: 0.0986, loss_grad: 0.7531, ssim_loss: 0.2864, eta: 0:00:03, time: 3.8000
+INFO train.py(205): PST900 Model Save to: model_last/my_cross/fusion_model_pst900.pth
+INFO train.py(206): 
+

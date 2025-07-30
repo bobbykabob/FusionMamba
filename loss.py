@@ -68,7 +68,13 @@ class SegmentationLoss(nn.Module):
         self.gamma = gamma
         self.ignore_index = ignore_index
         
-        # Cross-entropy loss
+        # Calculate class weights for PST900 (inverse frequency)
+        if weight is None and num_classes == 5:  # PST900 has 5 classes
+            # Based on our analysis: Background=97%, Person=0.1%, Car=0.8%, Bicycle=0.1%, Motorcycle=1.8%
+            class_weights = torch.tensor([1.0, 970.0, 121.25, 970.0, 53.89])  # Inverse of frequencies
+            weight = class_weights
+        
+        # Cross-entropy loss with class weights
         self.ce_loss = nn.CrossEntropyLoss(weight=weight, ignore_index=ignore_index)
         
     def focal_loss(self, pred, target):
@@ -90,8 +96,8 @@ class SegmentationLoss(nn.Module):
         # Focal loss for hard examples
         focal_loss_value = self.focal_loss(pred_logits, target)
         
-        # Combined loss
-        total_loss = ce_loss_value + 0.25 * focal_loss_value
+        # Combined loss with higher focal loss weight for better handling of class imbalance
+        total_loss = ce_loss_value + 0.5 * focal_loss_value
         
         return total_loss, ce_loss_value, focal_loss_value
 

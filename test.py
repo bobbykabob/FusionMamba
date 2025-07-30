@@ -12,7 +12,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 model = net(in_channel=1)
-model_path = "./model_last/my_cross/model.pth" # put the path of model.pth
+model_path = "./model_last/my_cross/fusion_model_pst900.pth" # put the path of model.pth
 use_gpu = torch.cuda.is_available()
 
 if use_gpu:
@@ -104,8 +104,8 @@ def fusion(input_folder_ir, input_folder_vis, output_folder):
 
 
 if __name__ == '__main__':
-    input_folder_1 = '/root/autodl-tmp/FusionMamba_last/images/ir_1'
-    input_folder_2 = '/root/autodl-tmp/FusionMamba_last/images/vis_1'
+    input_folder_1 = '/home/ubuntu/mainva/data/PST900_RGBT_Dataset/test/thermal'
+    input_folder_2 = '/home/ubuntu/mainva/data/PST900_RGBT_Dataset/test/rgb'
     output_folder = './outputs'
 
     fusion(input_folder_2, input_folder_1, output_folder)
